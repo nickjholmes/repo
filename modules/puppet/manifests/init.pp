@@ -7,6 +7,10 @@ class puppet {
                 source  => 'puppet:///modules/puppet/pull-updates.sh',
                 mode    => '0755',
         }
+        file { '/home/ubuntu/.ssh/id_rsa.pub':
+                source  => 'puppet:///modules/puppet/ubuntu.pub',
+                mode    => '0600',
+        } 
         file { '/home/ubuntu/.ssh/id_rsa':
                 source  => 'puppet:///modules/puppet/ubuntu.priv',
                 mode    => '0600',

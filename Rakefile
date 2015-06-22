@@ -1,8 +1,18 @@
-SSH = 'ssh -A -i ~/git/nickjholmes/njh67aws.pub -l ubuntu'
+REPO = 'git@github.com:nickjholmes/repo.git'
+SSH = 'ssh -A -l ubuntu'
 
-desc "Run Puppet on ENV['CLIENT']"
-task :apply do
+desc "Bootstrap Puppet on ENV['CLIENT'] with hostname ENV['HOSTNAME']"
+task :bootstrap do
 	client = ENV['CLIENT']
-	sh "git push"
-	sh "#{SSH} #{client} pull-updates"
+	hostname = ENV['HOSTNAME'] || client
+	commands = <<BOOTSTRAP
+sudo hostname #{hostanme} && \
+sudo su - c 'echo #{hostanme} > /etc/hostname' && \
+wget http://apt.puppetlabs.com/puppetlabs-release-precise.deb && \
+sudo dpkg -i puppetlabs-release-precise.deb && \
+sudo apt-get update && sudo apt-get -y  install git puppet && \
+git clone #{REPO} puppet && \
+sudo puppet apply --modulepath=/home/ubuntu/puppet/modules /home/ubuntu/puppet/manifests/site.pp
+BOOTSTRAP
+	sh "#{SSH} #{client} '#{commands}'"
 end

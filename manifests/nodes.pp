@@ -1,3 +1,3 @@
-node 'njh67aws','njh67aws1' {
+node 'njh67aws1' {
 	include puppet
 }

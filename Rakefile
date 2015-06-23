@@ -14,7 +14,7 @@ wget http://apt.puppetlabs.com/puppetlabs-release-precise.deb && \
 sudo dpkg -i puppetlabs-release-precise.deb && \
 sudo apt-get update && sudo apt-get -y install git 
 sudo apt-get update && sudo apt-get -y install puppet && \
-git clone #{REPO} puppet && \
+sudo git clone #{REPO} puppet && \
 sudo puppet apply /home/ubuntu/puppet/manifests/site.pp --modulepath=/home/ubuntu/puppet/modules
 BOOTSTRAP
 	sh "#{SSH} #{client} '#{commands}'"

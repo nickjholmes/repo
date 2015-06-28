@@ -1,6 +1,6 @@
 #!/bin/sh
 
-sntax_errors=0
+syntax_errors=0
 error_msg=$(mktemp /tmp/error_msg.XXXXXX)
 
 if git rev-parse --quiet --verify HEAD > /dev/null

@@ -1,0 +1,22 @@
+node 'njh67aws1' {
+	include puppet
+}
+#node 'njh67aws'{
+#	#include memcached
+#	#include test
+#	include admin::ntp
+#}
+node 'bitfield_server' {
+}
+
+node 'njh67aws' inherits 'bitfield_server' {
+	if tagged('njh67aws') {
+		notify { 'this will succeed': }
+	}
+	if tagged('bitfield_server') {
+		notify { 'so will this': }
+	}
+	if tagged('nholmes') {
+		notify { 'but not this': }
+	}
+}

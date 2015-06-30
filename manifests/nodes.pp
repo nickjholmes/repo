@@ -6,7 +6,7 @@ node 'njh67aws'{
 
 	file { '/etc/rsyncd.d/myapp.conf':
 		ensure	=> present,
-		source 	=> 'puppet:///modiles/admin/files/myapp.rsync',
+		source 	=> 'puppet:///modules/admin/myapp.rsync',
 		require	=> File['/etc/rsyncd.d'],
 		notify	=> Exec['update-rsyncd.conf'],
 	}

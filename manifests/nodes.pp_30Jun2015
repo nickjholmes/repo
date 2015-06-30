@@ -1,0 +1,26 @@
+node 'njh67aws1' {
+	include puppet
+}
+node 'njh67aws'{
+#	#include memcached
+#	#include test
+	include admin::ntp_uk
+#	include admin::stages
+#	if tagged('admin::ntp') {
+#		notify { 'This node is running NTP': }
+#	}
+#	if tagged('admin') {
+#		notify { 'This node includes at least one class from the admin module': }
+#	}
+#	tag('big_server')
+#	if tagged('big_server') {
+#		notify { 'Big server detected. Adding extra workload': }
+#	}
+	notify { "This is $::operatingsystem version $::operatingsystemrelease om $::architecture architecture, kernel version $::kernelversion": }
+	$message = generate('/usr/local/bin/message.rb')
+	notify { $message: }
+	append_if_no_such_line { 'enable-ip-conntrack':
+		file	=>	'/etc/modules',
+		line	=>	'ip_conntrack',
+	}
+}

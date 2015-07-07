@@ -27,5 +27,5 @@ node 'njh67aws'{
 #	include app::flipr
 	include user::virtual
 	include user::sysadmins
-	include user::developers
+#	include user::developers
 }

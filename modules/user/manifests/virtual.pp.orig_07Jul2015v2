@@ -6,7 +6,6 @@ class user::virtual {
 			owner	=>	$user,
 			group	=>	$user,
 		}
-	}
 
 	define ssh_user($key,$dotfile='') {
 		user { $name:

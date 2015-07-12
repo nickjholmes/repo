@@ -1,5 +1,6 @@
 node 'njh67aws1' {
 	include puppet
+	include apache
 }
 node 'njh67aws'{
 #	include apache

@@ -10,17 +10,6 @@ service { 'nginx':
 	ensure	=> running,
 	require	=> [ Package['nginx'] ],
 }
-	
-# 'git' already installed so not required
-#package { 'git':
-#	ensure => installed,
-#	require=> [ Service['nginx'] ],
-#	}
-
-#service { 'git':
-#	ensure	=> running,
-#	require	=> [ Package['git'] ],
-#}
 
 package { 'bundler':
 	ensure => installed,
@@ -69,7 +58,13 @@ file { [ '/opt/code/nginx-unicorn-sinatra/var/', '/opt/code/nginx-unicorn-sinatr
 		require	=> [ Exec['bundle install'] ],
 	}
 
-file { '/etc/nginx/nginx.conf.new':
+
+exec { 'copy /etc/nginx/nginx.conf':
+	command=> '/bin/cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.orig',
+	require	=> [ File['/opt/code/nginx-unicorn-sinatra/var/', '/opt/code/nginx-unicorn-sinatra/var/run', '/opt/code/nginx-unicorn-sinatra/var/log'] ],
+	}
+
+file { 'copy /etc/nginx/nginx.conf':
 	ensure => present,
 	source => '/opt/code/nginx-unicorn-sinatra/config/nginx.conf',
 	require	=> [ File['/opt/code/nginx-unicorn-sinatra/var/', '/opt/code/nginx-unicorn-sinatra/var/run', '/opt/code/nginx-unicorn-sinatra/var/log'] ],

@@ -11,6 +11,7 @@ service { 'nginx':
 	require	=> [ Package['nginx'] ],
 }
 	
+# 'git' already installed so not required
 #package { 'git':
 #	ensure => installed,
 #	require=> [ Service['nginx'] ],
@@ -23,7 +24,7 @@ service { 'nginx':
 
 package { 'bundler':
 	ensure => installed,
-	require=> [ Package['git'] ],
+	require=> [ Service['nginx'] ],
 	install_options => [ '-y' ],
 	}
 
@@ -48,41 +49,41 @@ vcsrepo { '/opt/code/simple-sinatra-app':
 	}
 
 # preferred symlink syntax
-file { '/opt/code/nginx-unicorn-sinatra':
+file { '/var/www/nginx-unicorn-sinatra':
 	ensure => link,
-	target => '/var/www/nginx-unicorn-sinatra',
+	target => '/opt/code/nginx-unicorn-sinatra',
 	require	=> [ Vcsrepo['/opt/code/simple-sinatra-app'] ],
 	}
 	
 exec { 'bundle install':
 	command=> '/usr/bin/bundle install',
 	cwd=> '/opt/code/nginx-unicorn-sinatra',
-	require	=> [ File['/opt/code/nginx-unicorn-sinatra'] ],
+	require	=> [ File['/var/www/nginx-unicorn-sinatra'] ],
 	}
 
 	
 
 # create directories
-file { [ '/var/run', '/var/log' ]:
+file { [ '/opt/code/nginx-unicorn-sinatra/var/', '/opt/code/nginx-unicorn-sinatra/var/run', '/opt/code/nginx-unicorn-sinatra/var/log' ]:
     	ensure => directory,
 		require	=> [ Exec['bundle install'] ],
 	}
 
-file { '/etc/nginx/nginx.conf':
+file { '/etc/nginx/nginx.conf.new':
 	ensure => present,
 	source => '/opt/code/nginx-unicorn-sinatra/config/nginx.conf',
-	require	=> [ File['/var/log', '/var/log'] ],
+	require	=> [ File['/opt/code/nginx-unicorn-sinatra/var/', '/opt/code/nginx-unicorn-sinatra/var/run', '/opt/code/nginx-unicorn-sinatra/var/log'] ],
 	}
 
 file { '/opt/code/nginx-unicorn-sinatra/config.ru':
         ensure => present,
-        source => '/opt/code/simple-sinatra/config.ru',
-	require	=> [ File['/etc/nginx/nginx.conf'] ],
+        source => '/opt/code/simple-sinatra-app/config.ru',
+	require	=> [ File['/etc/nginx/nginx.conf.new'] ],
         }
 
 file { '/opt/code/nginx-unicorn-sinatra/helloworld.rb':
         ensure => present,
-        source => '/opt/code/simple-sinatra/helloworld.rb',
+        source => '/opt/code/simple-sinatra-app/helloworld.rb',
 	require	=> [ File['/opt/code/nginx-unicorn-sinatra/config.ru'] ],
         }
 

@@ -6,9 +6,14 @@ package { 'nginx':
 	ensure => installed,
 	}
 
+user { 'nginx':
+	ensure => present,
+	require	=> [ Package['nginx'] ],
+}
+	
 service { 'nginx':
 	ensure	=> running,
-	require	=> [ Package['nginx'] ],
+	require	=> [ User['nginx'] ],
 }
 
 package { 'bundler':

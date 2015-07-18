@@ -64,16 +64,16 @@ exec { 'copy /etc/nginx/nginx.conf':
 	require	=> [ File['/opt/code/nginx-unicorn-sinatra/var/', '/opt/code/nginx-unicorn-sinatra/var/run', '/opt/code/nginx-unicorn-sinatra/var/log'] ],
 	}
 
-file { 'copy /etc/nginx/nginx.conf':
+file { '/etc/nginx/nginx.conf':
 	ensure => present,
 	source => '/opt/code/nginx-unicorn-sinatra/config/nginx.conf',
-	require	=> [ File['/opt/code/nginx-unicorn-sinatra/var/', '/opt/code/nginx-unicorn-sinatra/var/run', '/opt/code/nginx-unicorn-sinatra/var/log'] ],
+	require	=> [ Exec['copy /etc/nginx/nginx.conf'] ],
 	}
 
 file { '/opt/code/nginx-unicorn-sinatra/config.ru':
         ensure => present,
         source => '/opt/code/simple-sinatra-app/config.ru',
-	require	=> [ File['/etc/nginx/nginx.conf.new'] ],
+		require	=> [ File['/etc/nginx/nginx.conf'] ],
         }
 
 file { '/opt/code/nginx-unicorn-sinatra/helloworld.rb':

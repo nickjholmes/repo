@@ -80,7 +80,7 @@ file { '/etc/nginx/nginx.conf':
 
 # archive /opt/code/nginx-unicorn-sinatra/config.ru
 exec { 'copy /opt/code/nginx-unicorn-sinatra/config.ru':
-	command=> '/opt/code/nginx-unicorn-sinatra/config.ru /opt/code/nginx-unicorn-sinatra/config.ru.orig',
+	command=> '/bin/cp /opt/code/nginx-unicorn-sinatra/config.ru /opt/code/nginx-unicorn-sinatra/config.ru.orig',
 	require	=> [ File['/etc/nginx/nginx.conf'] ],
 	}
 	
